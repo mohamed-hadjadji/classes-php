@@ -41,6 +41,19 @@ $momo -> register($login,$password, $email, $firstname, $lastname);
                <input type="submit" name="connexion" id="submit" class="button-primary" value="Log in" />
                    
             </form>
+            <hr><hr>
+
+            <?php
+
+            if(isset($_POST['login']) && isset($_POST['password']))
+        {
+            $login = htmlspecialchars($_POST['login']);
+            $password = htmlspecialchars($_POST['password']);
+            $momo -> connect($login, $password);
+                
+        }
+            ?>
+
 
             <h1>Connexion</h1>
 
@@ -53,6 +66,34 @@ $momo -> register($login,$password, $email, $firstname, $lastname);
                     <input type="password" name="password" id="user_pass" class="input" placeholder="Password" value="" size="20" required/> 
     
 
-               <input type="submit" name="submit" id="submit" class="button-primary" value="Log in" />
+               <input type="submit" name="submit" id="submit" class="button-primary" value="Valider" />
+           </form>
+
+         <hr><hr>
+         <?php
+            if(isset($_POST['deconnexion']))
+                { 
+            $momo -> disconnect();
+                }
+         ?>
+
+          <h1>Déconnexion</h1>
+          <form name="" id="loginform" action="#" method="post" class="">
+            <input type="submit" name="deconnexion" id="submit" class="" value="Déconnexion" />
+
+          <hr><hr>
+         <?php
+            if(isset($_POST['delete']))
+                { 
+            $momo -> delete();
+                }
+         ?>
+
+          <h1>Delete</h1>
+          <form name="" id="loginform" action="#" method="post" class="">
+            <input type="submit" name="delete" id="submit" class="" value="Delete" />
+
+
+
 
 

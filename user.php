@@ -53,15 +53,49 @@ class User
 	public function connect($login, $password)
 	{
       $connexion =  mysqli_connect("localhost","root","","classes"); 
+      $login = htmlspecialchars($_POST['login']);
+      $password = htmlspecialchars($_POST['password']);
+
+            if($login !== "" && $password !== "")
+            {
+                $requete = "SELECT count(*) FROM utilisateurs where
+                login = '".$login."' ";
+                $exec_requete = mysqli_query($connexion,$requete);
+                $reponse      = mysqli_fetch_array($exec_requete);
+                $count = $reponse['count(*)'];
+
+                $requete4 = "SELECT * FROM utilisateurs WHERE login='".$login."'";
+                $exec_requete4 = mysqli_query($connexion,$requete4);
+                $reponse4 = mysqli_fetch_array($exec_requete4);
+
+                if( $count!=0 && $_SESSION['login'] !== "" && password_verify($password, $reponse4[2]) )
+                {
+            
+                $_SESSION['login'] = $_POST['login'];
+                $user = $_SESSION['login'];
+
+            echo "<h3><b>Bonjour <u>$user,</u> vous êtes connecté</b></h3>";
+
+                }
+                else
+                {
+                header('Location: connexion.php?erreur=1'); // utilisateur ou mot de passe incorrect
+                }
+            }
 	}
 
 	public function disconnect()
 	{
-
+      session_unset();
+                      
 	}
 
 	public function delete()
 	{
+		$connexion =  mysqli_connect("localhost","root","","classes"); 
+		$requete = "DELETE FROM utilisateurs WHERE login = '".$_SESSION['login']."'";
+		$query=mysqli_query($connexion,$requete);
+
 
 	}
 
