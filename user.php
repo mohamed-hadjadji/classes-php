@@ -15,7 +15,7 @@ class User
        if (isset($_POST['connexion']))
        {
             $login = $_POST['login'];
-	        $password= password_hash($_POST["mdp1"], PASSWORD_DEFAULT, array('cost' => 12));
+	        $password= password_hash($_POST["mdp1"], PASSWORD_DEFAULT);
 	        $email= $_POST['email'];
 	        $firstname= $_POST['firstn'];
 	        $lastname= $_POST['lastn'];
@@ -77,10 +77,7 @@ class User
             echo "<h3><b>Bonjour <u>$user,</u> vous êtes connecté</b></h3>";
 
                 }
-                else
-                {
-                header('Location: connexion.php?erreur=1'); // utilisateur ou mot de passe incorrect
-                }
+                
             }
 	}
 
@@ -99,14 +96,34 @@ class User
 
 	}
 
-	public function update($login, $email, $firstname, $lastname)
+	public function update($login, $password, $email, $firstname,$lastname)
 	{
+         $connexion = mysqli_connect ("localhost", "root", "", "classes");
+          $password= password_hash($_POST["password"],PASSWORD_DEFAULT);
+         $requete = "UPDATE utilisateurs SET login = '$login', password = '$password', email = '$email', firstname = '$firstname', lastname = '$lastname' WHERE login = '".$_SESSION['login']."'";
+      
+         $query = mysqli_query($connexion,$requete); 
+         
+         $_SESSION['login'] = $login;
+         header('Location: index.php');
+     }
 
-	}
+     public function isConnected()
+     {
+     	if (isset($_SESSION['login'])==false)
+       {
+       echo "<h3>Vous n'êtes pas Connecté !!";
+       }
+       elseif(isset($_SESSION['login'])==true)
 
-	public function isConnected()
-	{
-
-	}
+       {
+      
+        $user = $_SESSION['login'];
+            echo "<h3><b>Bonjour <u>$user,</u> vous êtes connecté.</b></h3>"; 
+       }
+    
+     }
+	
 }
+
 ?>
